@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" ng-app="firstApp">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,6 +21,30 @@
 
             <div class="navbar-heading">Nazwa lekcji</div>
         </nav>
+        <div class="container">
+            <div class="row text-center" ng-controller="VeryLongNameController as vlnCtrl" >
+                {{vlnCtrl.messege}}
+            </div>
+        </div>
+        <div ng-controller="FirstController">
+            {{messege}}
+        </div>
+        <div ng-controller="secondController">
+
+{{messege}}
+
+        </div>
+        <div class="container">
+            <div class="row text-center">
+                <div class="well" ng-controller="settingsController">
+                    <strong>Imię i nazwisko </strong>{{settings.firstName}}{{settings.lastName}}
+
+                    <div class="main" ng-controller="passwordController">
+                        {{paswordHistory.firstName}}
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="js/jquery.js"></script>
         <script src="js/bootstrap.min.js"></script>
@@ -31,8 +55,27 @@
          var app = angular.module('firstApp', []);
 
          app.controller('FirstController', ['$scope', function($scope){
-             $scope.messege = 'Wiadomośc z kontralera';
+             $scope.messege = 'Wiadomośc z kontrolera';
          }]);
+         app.controller('secondController', ['$scope', function($scope){
+             $scope.messege ='Wiadomośc z drugiego kontrollera'
+         }])
+         app.controller('settingsController', ['$scope', function($scope){
+             $scope.settings ={
+                 firstName: 'Adam',
+                 lastName: 'Nowak' 
+             }
+         }])
+         app.controller('passwordController', ['$scope', function($scope){
+             $scope.paswordHistory ={
+                 firstName: 'Adam',
+                 lastName: 'Nowak' 
+             }
+         }])
+
+         app.controller('VeryLongNameController', function($scope){
+             this.messege="bardzo długi tekst controllera nawet jest trochę za długi"
+         })
         </script>
     </body>
 </html>

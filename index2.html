@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="firstApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+                <div class="well text-center" ng-controller="FirstController">
+
+                        {{messege}} <br>
+                        {{alert}} <br>
+                        <button class="btn btn-primary" ng-click="showMessage()">Wyświetl wiadomoś</button>
+
+                        
+                        <div class="secondText" ng-controller="SecondController">
+                            {{messege}} -{{$parent.messege}}<br>
+                            {{alert}} <br>
+                            <button class="btn btn-primary" ng-click="showMessage()">Wyświetl wiadomoś</button>
+                        </div>
+                </div>  
+        </div>
+    </div>
+   
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        var app = angular.module('firstApp', [])
+    
+    app.controller('FirstController', ['$scope', function($scope){
+
+        $scope.messege= "my first  messege";
+        $scope.alert = "This is alert";
+
+        $scope.showMessage = function(){
+            alert($scope.messege);
+        }
+    }])
+
+    app.controller('SecondController', ['$scope', function($scope){
+
+$scope.messege= "my second  messege";
+$scope.$parent.messege = "overwritten message";
+}])
+    </script>
+</body>
+</html>
