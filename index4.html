@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="firstApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+                <div class="well text-center" ng-controller="FirstController">
+                        {{messages}}
+                    <br>
+                        {{::post}}
+<br>
+                        {{::post.categories}}
+                       
+                        <button class="btn btn-danger" ng-click="clearCategories()">Clear Table</button>
+
+                        <button class="btn btn-success" ng-click="addCategories()">add Table</button>
+
+                </div>  
+        </div>
+    </div>
+   
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        var app = angular.module('firstApp', [])
+    
+    app.controller('FirstController', ['$scope', function($scope){
+         
+         $scope.messages = [
+             'first',
+             'second',
+             'thierd'
+         ];
+
+         $scope.post = {
+             title: 'short lesson of programing',
+             categories: ['programing', 'graphics', 'projects']
+
+         };
+
+         $scope.clearCategories = function () {
+
+             $scope.post.categories = [];
+         } 
+
+         $scope.addCategories = function(){
+             $scope.post.categories = ['new1', 'new2', 'new3'];
+         }
+      
+    }])
+
+    </script>
+</body>
+</html>
