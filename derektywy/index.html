@@ -1,133 +1,203 @@
 <!DOCTYPE html>
 <html lang="pl" ng-app="exampleApp">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Kurs AngularJS (eduweb.pl)</title>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <title>Kurs AngularJS (eduweb.pl)</title>
 
-        <link href="css/bootstrap.css" rel="stylesheet">
-        <link href="css/styles.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400&subset=latin,latin-ext' rel='stylesheet'
+        type='text/css'>
 
-        <style>
-            .user-avatar{
-                float: right;
-                height: 25px;
-                transition: 0.4s all;
-            }
-            .user-avatar:hover{
-                transform: scale(1.2);
-            }
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 
-            .light{
-                background-color: #ddd;
-            }
+    <style>
+        .user-avatar {
+            float: right;
+            height: 25px;
+            transition: 0.4s all;
+        }
 
-            .dark{
-                background-color: #ccc;
-            }
+        .user-avatar:hover {
+            transform: scale(1.2);
+        }
 
-            .strong{
-                font-weight: bold;
-            }
+        .light {
+            background-color: #ddd;
+        }
 
-            .underscore{
-                text-decoration: underline;
-            }
+        .dark {
+            background-color: #ccc;
+        }
 
-            .last{
-                background-color: red;
-            }
+        .strong {
+            font-weight: bold;
+        }
 
-            .middle{
-                background-color: orange;
-            }
+        .underscore {
+            text-decoration: underline;
+        }
 
-            .first{
-                background-color: green;
-            }
-        </style>
-    </head>
-    <body>
+        .last {
+            background-color: red;
+        }
 
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <a class="navbar-brand" href="#">
-                <img ng-src="img/angularjs-for-header-only.svg" alt="AngularJS">
-            </a>
+        .middle {
+            background-color: orange;
+        }
 
-            <div class="navbar-heading">Dyrektywy i wyświetlanie - część II</div>
-        </nav>
-        <div class="container col-xs-4" ng-controller="ExampleController">
-            <div class="row text-center">
-                <div class="col-xs-4"></div>
-                <h3>all useres</h3>
-                <ul class="list-group">
-                    <li class="list-group-item " ng-repeat="(id ,user) in users">{{id}}
-                         {{user.name}}
-                        <img class="user-avatar" ng-src="{{user.avatar}}" alt="">
-                    </li>
-                </ul>
+        .first {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <a class="navbar-brand" href="#">
+            <img ng-src="img/angularjs-for-header-only.svg" alt="AngularJS">
+        </a>
+
+        <div class="navbar-heading">Derective</div>
+    </nav>
+    <div class="container" ng-controller="ExampleController">
+            <div class="row">
+                <select class="form-control" ng-model="showUsers">
+                    <option value="all">all</option>
+                    <option value="active">active</option>
+                    <option value="admin">admin</option>
+                </select>
+            </div>
+
+            <div class="row text-center" ng-switch on="showUsers">
+
+                <div class="col-xs-12" ng-switch-default>Check which part of user do you want to show </div>
+
+                <div class="col-xs-12" ng-switch-when="all">
+                    <h3>All users</h3>
+
+                    <ul class="list-group" ng-if="users.length">
+                        <li class="list-group-item" ng-repeat="user in users" ng-class="{first: $first, last: $last, middle: $middle, strong: $odd, underscore: $even}">
+                            {{ $index }} {{ user.name }}
+                            <img class="user-avatar" ng-src="{{ user.avatar }}" alt="">
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-xs-12" ng-switch-when="active">
+                    <h3>active users</h3>
+
+                    <ul class="list-group" ng-if="users.length">
+                        <li class="list-group-item" ng-repeat="(id, user) in users" ng-show="user.active" ng-class-even="'underscore'" ng-class-odd="'strong'">
+                            {{ id }} {{ user.name }}
+                            <img class="user-avatar" ng-src="{{ user.avatar }}" alt="">
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-xs-12" ng-switch-when="admin">
+                    <h3>Admin users</h3>
+
+                    <ul class="list-group" ng-if="users.length">
+                        <li class="list-group-item" ng-repeat="user in users" ng-hide="user.role != 'admin'" ng-style="adminStyle">
+                            {{ user.name }}
+                            <img class="user-avatar" ng-src="{{ user.avatar }}" alt="">
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         </div>
 
-        <div class="container col-xs-4" ng-controller="ExampleController">
-            <div class="row text-center">
-                <div class="col-xs-4"></div>
-                <h3>Active  useres</h3>
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="user in users" ng-show="user.active">{{user.name}}
-                        <img class="user-avatar" ng-src="{{user.avatar}}" alt="">
-                    </li>
-                </ul>
-            </div>
-        </div>
 
 
-        <div class="container col-xs-4" ng-controller="ExampleController">
-            <div class="row text-center">
-                <div class="col-xs-4"></div>
-                <h3>Role useres</h3>
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="user in users" ng-hide=" user.role != 'admin'">{{user.name}}
-                        <img class="user-avatar" ng-src="{{user.avatar}}" alt="">
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        var app = angular.module('exampleApp', []);
 
-        
+        app.controller('ExampleController', ['$scope', function ($scope) {
+            $scope.adminStyle = {
+                color: 'red',
+                fontWeight: 'bold',
+                textDecoration: 'underline'
+            };
 
-        <script src="js/jquery.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/angular.min.js"></script>
-        <script src="js/main.js"></script>
-        <script>
-            var app = angular.module('exampleApp', []);
+            $scope.users = [{
+                    name: 'Asia',
+                    active: true,
+                    role: "user",
+                    avatar: 'img/comedian.jpg'
+                },
+                {
+                    name: 'Jarek',
+                    active: true,
+                    role: "user",
+                    avatar: 'img/confused.jpg'
+                },
+                {
+                    name: 'Tomek',
+                    active: false,
+                    role: "user",
+                    avatar: 'img/constructive.jpg'
+                },
+                {
+                    name: 'Maciek',
+                    active: true,
+                    role: "admin",
+                    avatar: 'img/cool.jpg'
+                },
+                {
+                    name: 'Kasia',
+                    active: true,
+                    role: "user",
+                    avatar: 'img/enraged.jpg'
+                },
+                {
+                    name: 'Rafał',
+                    active: false,
+                    role: "user",
+                    avatar: 'img/folkloric.jpg'
+                },
+                {
+                    name: 'Filip',
+                    active: true,
+                    role: "user",
+                    avatar: 'img/happy.jpg'
+                },
+                {
+                    name: 'Józek',
+                    active: true,
+                    role: "admin",
+                    avatar: 'img/horny.jpg'
+                },
+                {
+                    name: 'Adam',
+                    active: true,
+                    role: "user",
+                    avatar: 'img/comedian.jpg'
+                },
+                {
+                    name: 'Zuzia',
+                    active: true,
+                    role: "admin",
+                    avatar: 'img/folkloric.jpg'
+                },
+                {
+                    name: 'Grzegorz',
+                    active: true,
+                    role: "user",
+                    avatar: 'img/happy.jpg'
+                }
+            ];
+        }]);
+    </script>
+</body>
 
-            app.controller('ExampleController', ['$scope', function($scope){
-                $scope.adminStyle = {
-                    color: 'red',
-                    fontWeight: 'bold',
-                    textDecoration: 'underline'
-                };
-
-                $scope.users = [
-                    { name: 'Asia', active: true, role: "user", avatar: 'img/comedian.jpg' },
-                    { name: 'Jarek', active: true, role: "user", avatar: 'img/confused.jpg' },
-                    { name: 'Tomek', active: false, role: "user", avatar: 'img/constructive.jpg' },
-                    { name: 'Maciek', active: true, role: "admin", avatar: 'img/cool.jpg' },
-                    { name: 'Kasia', active: true, role: "user", avatar: 'img/enraged.jpg' },
-                    { name: 'Rafał', active: false, role: "user", avatar: 'img/folkloric.jpg' },
-                    { name: 'Filip', active: true, role: "user", avatar: 'img/happy.jpg' },
-                    { name: 'Józek', active: true, role: "admin", avatar: 'img/horny.jpg' },
-                    { name: 'Adam', active: true, role: "user", avatar: 'img/comedian.jpg' },
-                    { name: 'Zuzia', active: true, role: "admin", avatar: 'img/folkloric.jpg' },
-                    { name: 'Grzegorz', active: true, role: "user", avatar: 'img/happy.jpg' }
-                ];
-            }]);
-        </script>
-    </body>
 </html>
