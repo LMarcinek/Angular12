@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pl" ng-app="exampleApp">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kurs AngularJS (eduweb.pl)</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <link href="css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <a class="navbar-brand" href="#">
+                <img src="img/angularjs-for-header-only.svg" alt="AngularJS">
+            </a>
+
+            <div class="navbar-heading">Dyrektywy i formularze</div>
+        </nav>
+
+        <div class="container" ng-controller="ExampleController">
+            <div class="row">
+
+                <div class="alert alert-success" ng-show="formSave">
+                    <strong>Sukces!</strong> Twoje dane zostały zapisane!
+                </div>
+
+                <div ng-show="formSave" class="well" >
+                    <strong>Login: </strong> {{member.login}} <br>
+                    <strong>E-mail: </strong>{{member.email}} <br>
+                    <strong>Specjalizacja: </strong> {{member.specializations.name}} <br>
+                    <strong>Technologie: </strong> <span ng-repeat="tech in member.technologies">{{ tech.name }}, </span> <br>
+                    <strong>Typ konta: </strong> {{member.account}} <br>
+                </div>
+
+                <form class="form-horizontal" ng-hide="formSave" ng-submit="formSave=true" novalidate>
+
+                    <div class="form-group">
+                        <label for="uLogin" class="col-sm-2 control-label">Login</label>
+
+                        <div class="col-sm-6">
+                            <input id="uLogin"
+                            type="text"
+                            ng-model="member.login"
+                            ng-focus="loginPrompt = true"
+                            ng-blur="loginPrompt = false"
+                            class="form-control">
+                        </div>
+
+                        <div ng-show="loginPrompt" class="col-sm-4" style="font-size: .7em; padding: 8px 0; color: darkred;">
+                            Na podstawie Twojego loginu utworzymy konto e-mail.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="uEmail" class="col-sm-2 control-label">E-mail</label>
+
+                        <div class="col-sm-8">
+                            <input id="uEmail" ng-model="member.email" type="email" ng-disabled="useEduEmail" ng-readonly="useEduEmail" class="form-control">
+                        </div>
+
+                        <div class="col-sm-8 col-sm-offset-2">
+                            <div class="checkbox">
+                                <label>
+                                    <input ng-model="useEduEmail" ng-change="member.email =member.login + '@gmail.com'" type="checkbox" ng-disabled="!member.login">
+
+                                     Użyj e-maila w domenie eduweb
+                                     <span ng-show="member.login" >({{member.login}}@eduweb.pl)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="uSpec" class="col-sm-2 control-label">Specjalizacja</label>
+
+                        <div class="col-sm-8">
+                            <select class="form-control" id="uSpec" ng-model="member.specializations" ng-options="spec.name group by spec.type for spec in specializations">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                            <label for="uSpec" class="col-sm-2 control-label">Ulubione technologie</label>
+    
+                            <div class="col-sm-8">
+                                <div class="checkbox" ng-repeat="tech in technologies">
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            ng-model="tech.selected"
+                                            value="{{ tech.name }}"
+                                            ng-change="populateTechs()"
+                                            name="techs[]">
+                                        {{ tech.name }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="form-group">
+                        <label for="uSpec" class="col-sm-2 control-label">Typ konta</label>
+
+                        <div class="col-sm-8">
+                            <div class="radio" ng-repeat="type in accountTypes">
+                                <label>
+                                    <input ng-model="member.account" ng-value="type" type="radio">
+                                    {{type}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <button class="btn btn-success">Zapisz dane</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            var app = angular.module('exampleApp', []);
+
+            app.controller('ExampleController', ['$scope', 'filterFilter', function($scope , filterFilter){
+
+                $scope.member = 
+                
+                $scope.loginPrompt =false;
+                $scope.useEduEmail = false;
+                $scope.formSave =false;
+                 $scope.specializations = [
+                    { name: 'ASP.NET', type: 'Programowanie' },
+                    { name: 'PHP', type: 'Programowanie' },
+                    { name: 'HTML/CSS', type: 'Programowanie' },
+                    { name: 'Photoshop', type: 'Grafika' },
+                    { name: 'Illustrator', type: 'Grafika' },
+                    { name: 'Premiere', type: 'Video' },
+                    { name: 'Photoshop', type: 'Video' },
+                ];
+
+                $scope.technologies = [
+                    { name: 'Photoshop', selected: false },
+                    { name: 'Illustrator', selected: false },
+                    { name: 'PHP', selected: false },
+                    { name: 'ASP.NET', selected: false },
+                    { name: 'JavaScript', selected: false },
+                    { name: 'HTML/CSS', selected: false },
+                    { name: 'MySQL', selected: false },
+                    { name: 'JAVA', selected: false }
+                ];
+
+                $scope.accountTypes = [
+                    'Standard',
+                    'Optimum',
+                    'Premium',
+                    'Premium+'
+                ];
+
+
+                       $scope.populateTechs = function (){
+                $scope.member.technologies = filterFilter($scope.technologies, {selected: true});
+            }
+
+            }])
+
+         
+            
+        </script>
+    </body>
+</html>
