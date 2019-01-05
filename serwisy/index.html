@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pl" ng-app="exampleApp">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kurs AngularJS (eduweb.pl)</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <link href="css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <a class="navbar-brand" href="#">
+                <img src="img/angularjs-for-header-only.svg" alt="AngularJS">
+            </a>
+
+            <div class="navbar-heading">Timeout i Interval</div>
+        </nav>
+
+        <div class="container" ng-controller="Examplecontroller">
+            <div class="row text-center">
+                <div class="well">
+                    {{ status }}
+                </div>
+                <button class="btn btn-warning" ng-click="stopLogin()">Zatrzymaj logowanie</button>
+
+
+                <hr>
+                <hr>
+
+                <div class="well">{{ currDate | date: 'HH:mm:ss'}}</div>
+                <button class="btn btn-warning" ng-click="stopTime()">Zatrzymaj czas</button>
+                <button class="btn btn-success" ng-click="startTime()">Licz na nowo  czas</button>
+
+            </div>
+        </div>
+
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            var app = angular.module('exampleApp', []);
+
+            app.controller('Examplecontroller', ['$scope', '$timeout','$interval', function($scope, $timeout, $interval){
+                $scope.status = "trwa logowanie";
+
+                // setTimeout(function(){
+
+                //     $scope.status = 'Poprawnie zalogowano!';
+                //     console.log('uruchomiono Timeout')
+                // }, 1500)
+                    var timeoutId= $timeout(function () {
+                        $scope.status = "poprawnie zalogowany"
+                    }, 5000);
+                    var intervalId
+
+                    $scope.stopLogin = function () {
+                        $timeout.cancel(timeoutId)
+                    }
+                    $scope.startTime = function(){
+                    $scope.startDate = function(){
+                        $scope.currDate = new Date();
+                    }
+                    $scope.startDate();
+
+                      intervalId = $interval(function() {
+                        $scope.startDate();
+                    }, 1000)
+                    }
+                     $scope.stopTime = function () {
+                        $interval.cancel(intervalId)
+                    }
+                  
+                    
+            }]);
+        </script>
+    </body>
+</html>
