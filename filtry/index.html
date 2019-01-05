@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pl" ng-app="filterExampleApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Kurs AngularJS (eduweb.pl)</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400&subset=latin,latin-ext' rel='stylesheet'
+        type='text/css'>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container" ng-controller="FilterExampleController">
+        <div class="row text-center">
+            <div class="row">
+                <p>website users</p>
+                <pre>{{users | json }}</pre>
+            </div>
+
+            <button class="btn btn-success" ng-click="orderUsers()"> Sortuj według nazwy</button>
+            <button class="btn btn-primary" ng-click="hideEmail()">Ukryj adresy emial</button>
+            <button class="btn btn-warning" ng-click="showTop3()">wyświelt TOP3</button>
+
+        </div>
+    </div>
+
+
+
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        var app = angular.module("filterExampleApp", []);
+
+        app.controller("FilterExampleController", ['$scope', 'orderByFilter', 'maskEmailFilter', '$filter', function ($scope,
+            orderByFilter, maskEmailFilter, $filter) {
+            // $scope.users = ['Adam', 'Aneta', 'Marek', 'Kasia', 'Juzek', 'Antek', 'Filip', 'Asia'];
+
+            $scope.users = [{
+                    name: 'adam1',
+                    email: 'adam3213@eaduweb.pl'
+                },
+                {
+                    name: 'adam2',
+                    email: 'adam32352@eaduweb.pl'
+                },
+                {
+                    name: 'adam3',
+                    email: 'ada131m@eaduweb.pl'
+                },
+                {
+                    name: 'adam4',
+                    email: 'adam1231@eaduweb.pl'
+                },
+                {
+                    name: 'adam5',
+                    email: 'adam34@eaduweb.pl'
+                },
+                {
+                    name: 'adam6',
+                    email: 'adam5234@eaduweb.pl'
+                },
+                {
+                    name: 'adam7',
+                    email: 'adam2@eaduweb.pl'
+                },
+                {
+                    name: 'adam74',
+                    email: 'adam4@eaduweb.pl'
+                },
+                {
+                    name: 'adam34',
+                    email: 'adam3@eaduweb.pl'
+                }
+            ]
+
+
+            $scope.orderUsers = function () {
+                console.log('sortowanie użytkownikow');
+                $scope.users = orderByFilter($scope.users, 'name');
+            }
+
+            $scope.hideEmail = function () {
+                console.log('ukrywanie maila');
+                var users = $scope.users;
+                for (var i = 0; i < users.length; i++) {
+                    users[i]['email'] = maskEmailFilter(users[i]['email']);
+                }
+                $scope.users = users;
+
+            }
+            $scope.showTop3 = function () {
+                console.log('show me top3');
+                $scope.users = $filter('limitTo')($scope.users, 3)
+            }
+
+
+
+        }])
+
+        app.filter('maskEmail', function () {
+
+            return function (email, length, maskSign) {
+
+                email = email || '';
+                length = length || 3;
+                maskSign = maskSign || '*';
+
+                var parts = email.split('@');
+                var masked = parts[0].substr(0, length);
+                var maskLength = parts[0].length - length;
+
+                for (var i = 0; i < maskLength; i++) {
+                    masked += maskSign;
+                }
+
+                parts[0] = masked;
+
+                return parts.join('@');
+            };
+
+        });
+    </script>
+</body>
+
+</html>
