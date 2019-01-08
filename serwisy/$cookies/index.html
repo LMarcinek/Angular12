@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl" ng-app="exampleApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Kurs AngularJS (eduweb.pl)</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400&subset=latin,latin-ext' rel='stylesheet'
+        type='text/css'>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <a class="navbar-brand" href="#">
+            <img src="img/angularjs-for-header-only.svg" alt="AngularJS">
+        </a>
+
+        <div class="navbar-heading">Ciasteczka - $cookies i $cookieStore</div>
+    </nav>
+
+    <div class="container" ng-controller="ExampleController">
+        <div class="row text-center">
+            <div class="well">
+                {{ciasteczka}}
+            </div>
+            <div class="col-xs-6"><input class="form-control" ng-model="cName" placeholder="Podaj nazwe ciasteczka"
+                    type="text"></div>
+            <div class="col-xs-6"><input class="form-control" ng-model="cValue" type="text" placeholder="podaj wartośc ciasteczka"></div>
+            <div class="row">
+                <button class="btn btn-success" ng-click="saveCookies()" value="Zapisz">Zapisz mnie</button>
+                <button class="btn btn-danger" ng-click="deleteCookies()" value="usun">usun</button>
+                <button class="btn btn-info" ng-click="infoCookies()" value="info">info</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-cookies.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-cookie/4.1.0/angular-cookie.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        var app = angular.module('exampleApp', ['ngCookies']);
+
+
+        app.controller('ExampleController', ['$scope', '$cookies', '$cookieStore', function ($scope, $cookies, $cookieStore) {
+
+              // Retrieving a cookie
+
+              var userObj = {   
+                  name: 'Adma nowak',
+                  position:'Webdeveloper',
+                  technology: ['php', 'html','css', 'js']
+
+              }
+              $cookieStore.put('nowyCookies', userObj)
+            $scope.ciasteczka = $cookies;
+
+            // $cookies.uzytkownik = userObj;
+
+
+                $scope.saveCookies = function () {
+
+                $cookies[$scope.cName] = $scope.cValue;
+                
+       
+                    console.log("dupa123")
+
+            }
+
+            $scope.deleteCookies = function () {
+
+                delete $cookies[$scope.cName]
+            }
+
+            $scope.infoCookies = function () {
+
+console.log($cookieStore.get($scope.cName))            }
+
+        }])
+    </script>
+</body>
+
+</html>
