@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl" ng-app="exampleApp">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kurs AngularJS (eduweb.pl)</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <link href="css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <a class="navbar-brand" href="#">
+                <img src="img/angularjs-for-header-only.svg" alt="AngularJS">
+            </a>
+
+            <div class="navbar-heading">Funkcje - obiekty i tablice</div>
+        </nav>
+        <div class="container" ng-controller="ExampleController">
+            <div class="row text-center">
+                <div class="well">{{shapeA.show()}}</div>
+                <div class="well">{{shapeB.show()}}</div>
+                <div class="well">{{finalOpt}}</div>
+            </div>
+        </div>
+        
+
+
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/angular.min.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            var app  = angular.module('exampleApp', []);
+
+            app.controller('ExampleController', ['$scope', function($scope){
+
+                $scope.shapeA = {
+                    name: 'Object A',
+                    width: 100,
+                    height: 200,
+                    subObj: {
+                        subName:'subObjectA',
+                        subParam: 'subParam A'
+                    },
+                    show: function () {
+                        return this.name + '(' + this.width + 'x' + this.height + '/' + this.subObj.subName     + ')'               }
+                }
+
+                $scope.shapeB = angular.copy($scope.shapeA);
+                $scope.shapeB.name = "cycki";
+                console.log(angular.equals($scope.shapeA, $scope.shapeB));
+
+                var defaultOpts = { 
+                    backgroundColor: 'red',
+                    fontSize: '13px',
+                    color: 'white'
+
+
+                };
+                var options = {
+                    fontSize: '16px'
+                }
+                $scope.finalOpt = angular.extend(defaultOpts, options);
+
+                var users = [
+                {firstName: 'Adam', lastName: 'Nowak'},
+                {firstName: 'Adam', lastName: 'Nowak'},
+                {firstName: 'Adam', lastName: 'Nowak'},
+                {firstName: 'Adam', lastName: 'Nowak'},
+                {firstName: 'Adam', lastName: 'Nowak'},
+                {firstName: 'Adam', lastName: 'Nowak'},    
+                {firstName: 'Adam', lastName: 'Nowak'},
+                {firstName: 'Adam', lastName: 'Nowak'},
+
+                
+                ]
+
+                var simpleUser = [];
+                angular.forEach(users, function(value, key ){
+                    simpleUser.push(key+'.'+ value.firstName + ' '+ value.lastName)
+                })
+                console.log(simpleUser)
+            }])
+           
+        </script>
+    </body>
+</html>
